@@ -1,6 +1,6 @@
 package com.joe.springbootRest.service;
 
-import com.joe.springbootRest.dao.EmployeeDao;
+import com.joe.springbootRest.dao.EmployeeRepository;
 import com.joe.springbootRest.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,40 +8,44 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
-    private EmployeeDao employeeDAO;
+    private EmployeeRepository employeeRepository;
 
+    //No need to provide @Transactional on the methods because spring boot data jpa has that automatically
     @Override
-    @Transactional
     public List<Employee> findAll() {
-        return employeeDAO.findAll();
+        return employeeRepository.findAll();
     }
 
     @Override
-    @Transactional
     public Employee findById(int id) {
-        return employeeDAO.findById(id);
+        Optional<Employee> result=employeeRepository.findById(id);
+        Employee employee=null;
+        if (result.isPresent())
+            employee=result.get();
+        else
+            throw new RuntimeException("Not found"+ id);
+        return employee;
     }
 
     @Override
-    @Transactional
     public void save(Employee employee) {
-        employeeDAO.save(employee);
+        employeeRepository.save(employee);
     }
 
     @Override
-    @Transactional
     public void deleteById(int id) {
-        employeeDAO.deleteById(id);
+        employeeRepository.deleteById(id);
     }
 
     @Override
     public List<Employee> findAList(Map<String,String> employeesQuery) {
-        return employeeDAO.findAList(employeesQuery);
+        return employeeRepository.findByIdAndFirstName(Integer.parseInt(employeesQuery.get("id")),employeesQuery.get("name"));
     }
 
 }
