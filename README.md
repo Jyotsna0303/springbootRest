@@ -1,0 +1,16 @@
+# springbootRest
+This repo will have Rest api with Spring boot. DAO implementation using Standard JPA.
+
+Methods of RestController
+
+GetRequest to get the list all employees.
+
+Post to insert a employee to table if there is a id in the body of the request. Ignore that id and use the autoincrement for id (primary key) and return the employee with the autoincremented id
+
+Put to update an employee.
+
+Delete an employee from table.
+
+Get for finding a employee by id http://localhost:8090/employee/3
+
+get a list of employees with similar firstname and greater than an id http://localhost:8090/employeelist?id=0&name=Koe
